@@ -59,19 +59,19 @@ const Hero = () => {
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: 'video',
+        trigger: "video",
         start: startValue,
         end: endValue,
-        scrub:true,
+        scrub: true,
         pin: true,
-      }
-    })
+      },
+    });
 
     videoRef.current.onloadedmetadata = () => {
       tl.to(videoRef.current, {
-        currentTime: videoRef.current.duration
-      })
-    }
+        currentTime: videoRef.current.duration,
+      });
+    };
   }, []);
   return (
     <>
