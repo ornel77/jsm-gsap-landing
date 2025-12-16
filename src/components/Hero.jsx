@@ -2,8 +2,12 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/all";
 import { ScrollTrigger } from "gsap/all";
+import { useRef } from "react";
+import { useMediaQuery } from "react-responsive";
 
 const Hero = () => {
+  const videoRef = useRef();
+  const isMobile = useMediaQuery({ maxWidth: 767 });
   useGSAP(() => {
     const heroSplit = new SplitText(".title", { type: "chars, words" });
     const paragrahSplit = new SplitText(".subtitle", { type: "lines" });
@@ -49,6 +53,25 @@ const Hero = () => {
         },
         0
       );
+
+    const startValue = isMobile ? "top 50%" : "center 60%"; //top of video reaches 50% of the screen the animation start
+    const endValue = isMobile ? "120% top" : "bottom top";
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: 'video',
+        start: startValue,
+        end: endValue,
+        scrub:true,
+        pin: true,
+      }
+    })
+
+    videoRef.current.onloadedmetadata = () => {
+      tl.to(videoRef.current, {
+        currentTime: videoRef.current.duration
+      })
+    }
   }, []);
   return (
     <>
@@ -85,6 +108,16 @@ const Hero = () => {
           </div>
         </div>
       </section>
+
+      <div className="video absolute inset-0">
+        <video
+          ref={videoRef}
+          src="/videos/input.mp4"
+          muted
+          playsInline
+          preload="auto"
+        />
+      </div>
     </>
   );
 };
